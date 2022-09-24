@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct Home: View {
+    
+    @State var selectedPizza: Pizza = pizzas[0]
+    
     var body: some View {
         VStack {
             HStack {
@@ -82,9 +85,53 @@ struct Home: View {
                     .frame(width: size.width, height: size.height, alignment: .top)
                 }
             }
+            
+            //
+            pizzaView()
+                .padding(.top, 120)
         }
         .padding(.horizontal, -15)
         .padding(.top, 35)
+    }
+    
+    // MARK: Pizza view
+    @ViewBuilder
+    func pizzaView() -> some View {
+        GeometryReader { proxy in
+            let size = proxy.size
+            
+            ZStack(alignment: .top) {
+                Image(selectedPizza.pizzaImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: size.width, height: size.height)
+                    .background(alignment: .top, content: {
+                        Image("Powder")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: size.width)
+                            .offset(y: -30)
+                    })
+                    .scaleEffect(1.5)
+                
+                ZStack(alignment: .top) {
+                    // MARK: Price attributed string
+                    Text(priceAttributtedString(value: selectedPizza.pizzaPrice))
+                        .font(.largeTitle.bold())
+                }
+                .offset(y: -120)
+            }
+            .offset(y: size.height / 2)
+        }
+        .padding(.top)
+    }
+    
+    func priceAttributtedString(value: String) -> AttributedString {
+        var attrString = AttributedString(stringLiteral: value)
+        if let range = attrString.range(of: "$") {
+            attrString[range].font = .system(size: 25, weight: .bold)
+        }
+        return attrString
     }
     
 }
