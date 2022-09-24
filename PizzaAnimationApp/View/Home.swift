@@ -38,10 +38,14 @@ struct Home: View {
                     .font(.title)
             }
             
-            Text("Select Your Pizza")
+            Text("Select Your Pizza".uppercased())
                 .font(.caption)
                 .foregroundColor(.gray)
                 .padding(.top, 15)
+            
+            // MARK: Custom slider
+            animatedSlider()
+            
 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -55,6 +59,32 @@ struct Home: View {
             string[range].font = .system(size: 28, weight: .bold)
         }
         return string
+    }
+    
+    // MARK: Animated custom slider
+    @ViewBuilder
+    func animatedSlider() -> some View {
+        GeometryReader { proxy in
+            let size = proxy.size
+            LazyHStack {
+                ForEach(pizzas) { pizza in
+                    VStack(spacing: 10) {
+                        Text(pizza.pizzaTitle)
+                            .font(.largeTitle.bold())
+                        
+                        Text(pizza.pizzaDescription)
+                            .font(.callout)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.white.opacity(0.7))
+                            .padding(.horizontal)
+                            .padding(.top)
+                    }
+                    .frame(width: size.width, height: size.height, alignment: .top)
+                }
+            }
+        }
+        .padding(.horizontal, -15)
+        .padding(.top, 35)
     }
     
 }

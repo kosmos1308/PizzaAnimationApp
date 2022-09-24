@@ -18,7 +18,7 @@ struct Pizza: Identifiable {
     let pizzaPrice: String
 }
 
-var pizzes: [Pizza] = [
+var pizzas: [Pizza] = [
     Pizza(pizzaImage: "Pizza1", pizzaTitle: "Classic Red", pizzaDescription: "Special pizza sauce, tomatoes, mozzarella, parmesan cheese, red pepper flakes.", pizzaPrice: "10.50"),
     Pizza(pizzaImage: "Pizza2", pizzaTitle: "Chicken Carbonara", pizzaDescription: "Creamy sauce, mozzarella, chicken, bacon, mushrooms and crushed red pepper flakes.", pizzaPrice: "12.50"),
     Pizza(pizzaImage: "Pizza3", pizzaTitle: "Mediterranean", pizzaDescription: "Hummus, mozzarella, feta, spinach, red onion, banana pepper, green bel pepper, olives.", pizzaPrice: "11.90")
