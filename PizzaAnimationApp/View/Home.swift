@@ -10,6 +10,7 @@ import SwiftUI
 struct Home: View {
     
     @State var selectedPizza: Pizza = pizzas[0]
+    @State var swipeDirection: Alignment = .center
     
     var body: some View {
         VStack {
@@ -115,17 +116,77 @@ struct Home: View {
                     .scaleEffect(1.5)
                 
                 ZStack(alignment: .top) {
+                    // Hidding if it's first slide
+                    if pizzas.first?.id != selectedPizza.id {
+                        // MARK: Left Side
+                        ArcShape()
+                            .trim(from: 0.05, to: 0.3)
+                            .stroke(Color.gray, lineWidth: 2)
+                            .offset(y: 75)
+                        
+                        // MARK: Arrows image
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.gray)
+                            .rotationEffect(.init(degrees: -30))
+                            .offset(x: -(size.width / 2) + 30, y: 53)
+                    }
+                    
+                    // Hidding if it's last slide
+                    if pizzas.last?.id != selectedPizza.id {
+                        // MARK: Right Side
+                        ArcShape()
+                            .trim(from: 0.7, to: 0.95)
+                            .stroke(Color.gray, lineWidth: 2)
+                            .offset(y: 75)
+                        
+                        // MARK: Arrows image
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                            .rotationEffect(.init(degrees: 30))
+                            .offset(x: (size.width / 2) - 30, y: 53)
+                    }
+                    
                     // MARK: Price attributed string
                     Text(priceAttributtedString(value: selectedPizza.pizzaPrice))
                         .font(.largeTitle.bold())
                 }
                 .offset(y: -120)
+                
+                // MARK: Adding Gesturess
+                .gesture(
+                    DragGesture()
+                        .onEnded({ value in
+                            let translation = value.translation.width
+                            if translation < 0 && -translation > 20 {
+                                swipeDirection = .leading
+                                handleSwipe()
+                            }
+                            // MARK: If for right swipe
+                            if translation > 0 && translation > 20 {
+                                swipeDirection = .trailing
+                                handleSwipe()
+                            }
+                        })
+                )
             }
             .offset(y: size.height / 2)
         }
         .padding(.top)
     }
     
+    // MARK: Handle swipe
+    func handleSwipe() {
+        if swipeDirection == .leading {
+            print("left")
+        }
+        
+        if swipeDirection == .trailing {
+            print("right")
+        }
+    }
+    
+    
+    // MARK: Price string
     func priceAttributtedString(value: String) -> AttributedString {
         var attrString = AttributedString(stringLiteral: value)
         if let range = attrString.range(of: "$") {
